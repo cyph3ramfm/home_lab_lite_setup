@@ -1,0 +1,23 @@
+---
+- name: Deploy core infrastructure LITE if requested
+  when: deploy_core_infrastructure_LITE | bool
+  block:
+    - name: Check if home lab Docker network exists
+      community.docker.docker_network_info:
+        name: "{{ home_lab_network_name }}"
+      register: network_info
+
+    - name: Fail if home lab network doesn't exist
+      ansible.builtin.fail:
+        msg: "Required Docker network '{{ home_lab_network_name }}' does not exist. Please create the network first through the base_network_watchtower role."
+      when: not network_info.exists
+
+    - name: Include Portainer tasks
+      ansible.builtin.include_tasks: portainer.yml
+      when: portainer_data_path | length > 0
+
+    - name: Delete core infrastructure LITE related files
+      ansible.builtin.file:
+        path: /tmp/core_infrastructure_lite
+        state: absent
+      when: not debug_mode

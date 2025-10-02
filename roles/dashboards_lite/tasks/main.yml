@@ -1,0 +1,27 @@
+---
+- name: Deploy dashboards LITE if requested
+  when: deploy_dashboards_LITE | bool
+  block:
+    - name: Check if home lab Docker network exists
+      community.docker.docker_network_info:
+        name: "{{ home_lab_network_name }}"
+      register: network_info
+
+    - name: Fail if home lab network doesn't exist
+      ansible.builtin.fail:
+        msg: "Required Docker network '{{ home_lab_network_name }}' does not exist. Please create the network first through the base_network_watchtower role."
+      when: not network_info.exists
+
+    - name: Include Glances tasks
+      ansible.builtin.include_tasks: glances.yml
+      when: glances_config_path | length > 0
+
+    - name: Include Homepage tasks
+      ansible.builtin.include_tasks: homepage.yml
+      when: homepage_config_path | length > 0
+
+    - name: Delete dashboards LITE related files
+      ansible.builtin.file:
+        path: /tmp/dashboards_lite
+        state: absent
+      when: not debug_mode

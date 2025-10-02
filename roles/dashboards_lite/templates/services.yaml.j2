@@ -1,0 +1,37 @@
+---
+- Management:
+    - Portainer:
+        icon: portainer
+        href: https://{{ ansible_default_ipv4.address }}:9443/#!/home
+        description: Docker container management
+        server: {{ vault_device_name }}
+        status:
+          url: https://{{ ansible_default_ipv4.address }}:9443/#!/home
+          method: GET
+
+- System:
+    - Glances:
+        icon: glances
+        href: http://{{ ansible_default_ipv4.address }}:61208
+        description: System monitoring dashboard
+        server: {{ vault_device_name }}
+        status:
+          url: http://{{ ansible_default_ipv4.address }}:61208
+          method: GET
+
+- Remote Access:
+    - WireGuard:
+        icon: wireguard
+        href: http://{{ ansible_default_ipv4.address }}:51821
+        description: VPN server management
+        server: {{ vault_device_name }}
+        status:
+          url: http://{{ ansible_default_ipv4.address }}:51821
+          method: GET
+
+- Network:
+    - PuTTY:
+        icon: terminal
+        href: http://{{ ansible_default_ipv4.address }}:5800
+        description: SSH terminal access
+        server: {{ vault_device_name }}

@@ -1,0 +1,57 @@
+---
+- name: Setup network isolation
+  when: not passive_income_setup_complete | default(false)
+  block:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+      become: true
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - iptables-persistent
+          - python3-netaddr
+          - ansible
+        state: present
+      become: true
+
+    - name: Block containers from accessing LAN (subnet rule)
+      ansible.builtin.iptables:
+        chain: DOCKER-USER
+        source: "{{ passive_income_network_subnet }}"
+        destination: "{{ vault_main_network_subnet }}"
+        jump: REJECT
+        action: insert
+        rule_num: 1
+      become: true
+
+    - name: Block containers from accessing LAN (docker0 interface)
+      ansible.builtin.iptables:
+        chain: DOCKER-USER
+        in_interface: docker0
+        destination: "{{ vault_main_network_subnet }}"
+        jump: REJECT
+        action: insert
+        rule_num: 1
+      become: true
+
+    - name: Allow containers internet access
+      ansible.builtin.iptables:
+        table: nat
+        chain: POSTROUTING
+        source: "{{ passive_income_network_subnet }}"
+        jump: MASQUERADE
+        state: present
+      become: true
+
+    - name: Save iptables rules
+      ansible.builtin.command: netfilter-persistent save
+      become: true
+
+    - name: Create setup complete marker
+      ansible.builtin.file:
+        path: "/etc/passive_income_setup_complete"
+        state: touch
+        mode: '0644'
+      become: true

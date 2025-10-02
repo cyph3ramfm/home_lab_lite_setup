@@ -1,0 +1,41 @@
+---
+###
+# CPU usage: Low (5% max observed)
+# RAM usage: 200 Mb
+# ROI: Medium
+# deploy to rpi: 4, 5 (3 if enough RAM available)
+# home ISP: YES
+# VPS : NO
+###
+
+services:
+  earnapp:
+      #image: fazalfarhan01/earnapp:lite
+      image: trakkdev/earnapp:latest
+      container_name: earnapp
+      hostname: earnapp
+      restart: always
+      logging:
+        driver: "json-file"
+        options:
+            max-size: "10k"
+            max-file: 1
+      environment:
+          - EARNAPP_UUID={{ vault_earnapp_uuid }}
+      #volumes:
+      #    - {{ earnapp_data_path }}:/etc/earnapp      
+      deploy:
+        resources:
+          limits:
+            cpus: '1'
+            memory: 256M
+      labels:
+        - "com.centurylinklabs.watchtower.enable=false"
+      networks:
+        {{ passive_income_network_name }}:
+        
+
+networks:
+  {{ passive_income_network_name }}:
+    external: true
+

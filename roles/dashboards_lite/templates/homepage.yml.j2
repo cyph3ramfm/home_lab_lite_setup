@@ -1,0 +1,30 @@
+---
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    hostname: homepage
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    # uncomment if you do not want to run as root
+    #user: 1000:1000
+    # uncomment if you are not using a reverse proxy
+    ports:
+      - 3000:3000
+    environment:
+      - LOG_LEVEL=debug
+      - HOMEPAGE_ALLOWED_HOSTS={{ vault_homepage_allowed_hosts }} # required, may need port. See gethomepage.dev/installation/#homepage_allowed_hosts
+    volumes:
+      - {{ homepage_config_path }}:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - {{ home_lab_network_name }}
+
+networks:
+  {{ home_lab_network_name }}:
+    external: true

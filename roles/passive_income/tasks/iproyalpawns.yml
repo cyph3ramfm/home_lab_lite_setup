@@ -1,0 +1,19 @@
+---
+- name: Check if IproyalPawns container exists
+  community.docker.docker_container_info:
+    name: iproyalPawns
+  register: iproyalpawns_info
+
+- name: Render IproyalPawns compose file
+  ansible.builtin.template:
+    src: iproyalpawns.yml.j2
+    dest: /tmp/passive_income/iproyalpawns.yml
+    mode: '0644'
+  when: not iproyalpawns_info.exists
+
+- name: Deploy IproyalPawns container
+  community.docker.docker_compose_v2:
+    project_src: /tmp/passive_income
+    files:
+      - iproyalpawns.yml
+  when: not iproyalpawns_info.exists

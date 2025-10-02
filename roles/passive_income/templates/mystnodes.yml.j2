@@ -1,0 +1,41 @@
+---
+###
+# CPU usage: Low (5% max observed)
+# RAM usage: 128 Mb
+# ROI: High
+# deploy to rpi: 3, 4, 5
+# home ISP: YES
+# VPS : YES
+###
+
+services:
+  mysterium:
+    image: mysteriumnetwork/myst:latest
+    container_name: mystNodes
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "10k"
+          max-file: 1
+    ports:
+      - 4449:4449
+    environment:
+      - MYSTNODE_DUMMY=''
+    command: service --agreed-terms-and-conditions    
+    volumes:
+      - {{ mysterium_node_data_path }}:/var/lib/mysterium-node
+    cap_add:
+      - NET_ADMIN
+    deploy:
+      resources:
+        limits:
+          #cpus: '0.2'
+          memory: 128M
+    networks:
+      {{ passive_income_network_name }}:
+      
+
+networks:
+  {{ passive_income_network_name }}:
+    external: true

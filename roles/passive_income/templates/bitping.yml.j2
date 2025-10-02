@@ -1,0 +1,36 @@
+---
+###
+# CPU usage: Low (5% max observed)
+# RAM usage: 70 Mb
+# ROI: Low
+# deploy to rpi: 3, 4, 5
+# home ISP: YES
+# VPS : YES
+###
+
+services:
+   bitping:
+    image: bitping/bitpingd:latest
+    container_name: bitping
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "10k"
+          max-file: 1
+    environment:
+      - BITPING_EMAIL={{ vault_bitping_email }}
+      - BITPING_PASSWORD={{ vault_bitping_passwd }}
+    volumes:
+      - {{ bitping_data_path }}:/root/.bitping
+    networks:
+      - {{ passive_income_network_name }}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 70M
+
+networks:
+  {{ passive_income_network_name }}:
+    external: true

@@ -1,0 +1,34 @@
+###
+# CPU usage: Very high (100+ obeserved and throttled purposely)
+# RAM usage: 35 Mb
+# ROI: Very low
+# deploy to rpi: 3, 4, 5
+# home ISP: YES
+# VPS : YES
+###
+
+services:
+  traffMonetizer:
+    image: {{ traffmonetizer_image }}
+    container_name: traffMonetizer
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "10k"
+          max-file: 1
+    environment:
+      - TRAFFMONETIZER_DUMMY=''
+    command: start accept --token "{{ vault_traffmonetizer_token }}" --device-name "{{ vault_traffmonetizer_device_name }}"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 35M
+    networks:
+      {{ passive_income_network_name }}:          
+
+
+networks:
+  {{ passive_income_network_name }}:
+    external: true

@@ -1,0 +1,19 @@
+---
+- name: Check if EarnFM container exists
+  community.docker.docker_container_info:
+    name: earnfm
+  register: earnfm_info
+
+- name: Render EarnFM compose file
+  ansible.builtin.template:
+    src: earnfm.yml.j2
+    dest: /tmp/passive_income/earnfm.yml
+    mode: '0644'
+  when: not earnfm_info.exists
+
+- name: Deploy EarnFM container
+  community.docker.docker_compose_v2:
+    project_src: /tmp/passive_income
+    files:
+      - earnfm.yml
+  when: not earnfm_info.exists

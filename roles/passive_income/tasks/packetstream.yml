@@ -1,0 +1,19 @@
+---
+- name: Check if Packetstream container exists
+  community.docker.docker_container_info:
+    name: packetstream
+  register: packetstream_info
+
+- name: Render Packetstream compose file
+  ansible.builtin.template:
+    src: packetstream.yml.j2
+    dest: /tmp/passive_income/packetstream.yml
+    mode: '0644'
+  when: not packetstream_info.exists
+
+- name: Deploy Packetstream container
+  community.docker.docker_compose_v2:
+    project_src: /tmp/passive_income
+    files:
+      - packetstream.yml
+  when: not packetstream_info.exists

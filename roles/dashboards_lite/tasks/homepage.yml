@@ -1,0 +1,56 @@
+---
+- name: Check if Homepage container exists
+  community.docker.docker_container_info:
+    name: homepage
+  register: homepage_info
+
+- name: Ensure Homepage services directory exists
+  ansible.builtin.file:
+    path: "{{ homepage_config_path }}"
+    state: directory
+    mode: '0755'
+  when: not homepage_info.exists
+
+- name: Deploy Homepage services configuration
+  ansible.builtin.template:
+    src: services.yaml.j2
+    dest: "{{ homepage_config_path }}/services.yaml"
+    mode: '0644'
+  when: not homepage_info.exists
+
+- name: Deploy Homepage bookmarks configuration
+  ansible.builtin.template:
+    src: bookmarks.yaml.j2
+    dest: "{{ homepage_config_path }}/bookmarks.yaml"
+    mode: '0644'
+  when: not homepage_info.exists
+
+- name: Render Homepage compose file
+  ansible.builtin.template:
+    src: homepage.yml.j2
+    dest: /tmp/dashboards_lite/homepage.yml
+    mode: '0644'
+  when: not homepage_info.exists
+
+- name: Deploy Homepage using Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /tmp
+    files:
+      - homepage.yml
+  when: not homepage_info.exists
+
+- name: Wait for Homepage to be available
+  ansible.builtin.uri:
+    url: "http://localhost:3000"
+    status_code: 200
+  register: homepage_result
+  until: homepage_result.status == 200
+  retries: 30
+  delay: 10
+  when: not homepage_info.exists
+
+- name: Show Homepage URL
+  ansible.builtin.debug:
+    msg:
+      - "Your Home Lab LITE is available at http://{{ ansible_default_ipv4.address }}:3000"
+      - "Be sure to bookmark this URL for easy access."

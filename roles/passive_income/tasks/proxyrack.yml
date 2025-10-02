@@ -1,0 +1,19 @@
+---
+- name: Check if Proxyrack container exists
+  community.docker.docker_container_info:
+    name: proxyrack
+  register: proxyrack_info
+
+- name: Render Proxyrack compose file
+  ansible.builtin.template:
+    src: proxyrack.yml.j2
+    dest: /tmp/passive_income/proxyrack.yml
+    mode: '0644'
+  when: not proxyrack_info.exists
+
+- name: Deploy Proxyrack container
+  community.docker.docker_compose_v2:
+    project_src: /tmp/passive_income
+    files:
+      - proxyrack.yml
+  when: not proxyrack_info.exists

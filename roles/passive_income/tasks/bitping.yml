@@ -1,0 +1,19 @@
+---
+- name: Check if Bitping container exists
+  community.docker.docker_container_info:
+    name: bitping
+  register: bitping_info
+
+- name: Render Bitping compose file
+  ansible.builtin.template:
+    src: bitping.yml.j2
+    dest: /tmp/passive_income/bitping.yml
+    mode: '0644'
+  when: not bitping_info.exists
+
+- name: Deploy Bitping container
+  community.docker.docker_compose_v2:
+    project_src: /tmp/passive_income
+    files:
+      - bitping.yml
+  when: not bitping_info.exists

@@ -1,0 +1,36 @@
+---
+###
+# CPU usage: Low (5% max observed)
+# RAM usage: 35 Mb
+# ROI: Medium
+# deploy to rpi: 3, 4, 5
+# home ISP: YES
+# VPS : NO
+###
+
+services:
+  honeygain:
+    image: honeygain/honeygain
+    container_name: honeygain
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "10k"
+          max-file: 1
+    environment:
+      - HONEYGAIN_DUMMY=''
+      - DOCKER_DEFAULT_PLATFORM=linux/amd64
+    command: -tou-accept -email "{{ vault_honeygain_email }}" -pass "{{ vault_honeygain_passwd }}" -device {{ vault_device_name }}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 35M
+    networks:
+      {{ passive_income_network_name }}:
+      
+
+networks:
+  {{ passive_income_network_name }}:
+    external: true

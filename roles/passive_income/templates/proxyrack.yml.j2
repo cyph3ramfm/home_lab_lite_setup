@@ -1,0 +1,36 @@
+---
+###
+# CPU usage: Low (5% max observed)
+# RAM usage: 300 Mb
+# ROI: Very low
+# deploy to rpi: 4, 5
+# home ISP: YES
+# VPS : YES
+###
+
+services:
+  proxyrack:
+    image: proxyrack/pop:latest
+    container_name: proxyrack
+    restart: always    
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "10k"
+          max-file: 1
+    environment:
+      - UUID={{ vault_proxyrack_uuid }}
+      - API_KEY={{ vault_proxyrack_api_key }}
+      - DEVICE_NAME={{ vault_proxyrack_device_name }}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 300M
+    networks:
+      {{ passive_income_network_name }}:
+      
+
+networks:
+  {{ passive_income_network_name }}:
+    external: true

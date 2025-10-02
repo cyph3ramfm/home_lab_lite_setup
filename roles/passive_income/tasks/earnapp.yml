@@ -1,0 +1,26 @@
+---
+- name: Check if Earnapp container exists
+  community.docker.docker_container_info:
+    name: earnapp
+  register: earnapp_info
+
+- name: Render Earnapp compose file
+  ansible.builtin.template:
+    src: earnapp.yml.j2
+    dest: /tmp/passive_income/earnapp.yml
+    mode: '0644'
+  when: not earnapp_info.exists
+
+- name: Deploy Earnapp container
+  community.docker.docker_compose_v2:
+    project_src: /tmp/passive_income
+    files:
+      - earnapp.yml
+  when: not earnapp_info.exists
+
+- name: Restart Earnapp container to force vault ID
+  community.docker.docker_container:
+    name: earnapp
+    state: started
+    restart: true
+  when: not earnapp_info.exists

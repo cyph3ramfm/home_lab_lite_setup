@@ -1,0 +1,27 @@
+---
+services:
+  glances:
+    image: nicolargo/glances:ubuntu-latest-full
+    container_name: glances
+    hostname: glances
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    pid: host
+    ports:
+      - "61208:61208" # Web interface
+      - "61209:61209" # API interface
+    environment:
+      - "TZ={{ timezone }}"
+      - "GLANCES_OPT=-w" # Enable web server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - {{ glances_config_path }}:/glances/conf/glances.conf
+    networks:
+      - {{ home_lab_network_name }}
+
+networks:
+  {{ home_lab_network_name }}:
+    external: true
