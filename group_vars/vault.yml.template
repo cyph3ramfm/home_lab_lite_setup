@@ -25,53 +25,6 @@ vault_noip_domains:  # Comma-separated list of No-IP domains (e.g., example1.ddn
 ### Wireguard
 vault_wg_host_url:  # Public hostname of your VPN server (e.g., example.com)
 
-
-######################### Passive income #########################
-vault_main_network_subnet: 192.168.1.0/24 # e.g. 192.168.1.0/24 ## Main network subnet to isolate from passive income network
-
-### Bitping
-vault_bitping_email:  # Your Bitping account email
-vault_bitping_passwd:  # Your Bitping account password
-
-### Earnapp
-# Your Earnapp device id : ! must start with sdk-node-<md5sum>
-# <md5sum> can be done this way : echo -n sdk-node- && head -c 1024 /dev/urandom | md5sum | tr -d ' -'  (get the 32 char result)
-# Some time after starting it successfully : register your node on earnapp dashboard : https://earnapp.com/r/<your device id>
-vault_earnapp_uuid:  # sdk-node-<md5sum> # Your Earnapp device id
-
-### EarnFm
-# Retrieve from the "... More" section in your Earnfm dashboard
-vault_earnfm_api_key:  # Your EarnFm API key
-
-### Honeygain
-vault_honeygain_email:  # Your Honeygain account email
-vault_honeygain_passwd:  # Your Honeygain account password
-
-### IproyalPawns
-vault_iproyalpawns_email:  # Your IproyalPawns account email
-vault_iproyalpawns_passwd:  # Your IproyalPawns account password
-
-### Packetstream
-# Retrieve from Packetstream dashboard -> Download -> Looking for linux app -> docker command : -e CID=xxxx)
-vault_packetstream_cid:  # Your Packetstream CID (Customer ID)
-
-### Proxyrack
-# Your Proxyrack UUID (random string : use for instance : 
-# cat /dev/urandom | LC_ALL=C tr -dc 'A-F0-9' | dd bs=1 count=64 2>/dev/null )
-#   Don't forget to add this UUID in your dashboard (wait 5 minutes after starting container)
-vault_proxyrack_uuid:  # Your Proxyrack UUID
-vault_proxyrack_api_key:  # API key for Proxyrack (optional, if required by your setup)
-vault_proxyrack_device_name: "{{ vault_device_name }}" # Your Proxyrack device name
-
-### Repocket
-vault_repocket_email:  # Your Repocket account email
-vault_repocket_api_key:  # Your Repocket API KEY (retrieve from Repocket dashboard)
-
-### Traffmonetizer
-vault_traffmonetizer_token:  # "Your Traffmonetizer token" from Traffmonetizer dashboard
-vault_traffmonetizer_device_name: "{{ vault_device_name }}"
-
-
 ######################### Dashboards #########################
 ### Homepage
 vault_homepage_allowed_hosts: "{{ ansible_default_ipv4.address }}:3000" # List of allowed hosts for homepage (preset for current host IP)

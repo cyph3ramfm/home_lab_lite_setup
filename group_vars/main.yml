@@ -10,7 +10,6 @@ debug_mode: false  # Set to true to enable to enable visibility container deploy
 deploy_base_network_watchtower: true  # Set to true to deploy homelab base infrastructure (network, watchtower to manage containers)
 deploy_core_infrastructure_LITE: true  # Set to true to deploy only portainer
 deploy_remote_access_LITE: true  # Set to true to deploy remote access LITE (noip, wireguard, putty)
-deploy_passive_income: true  # Set to true to deploy passive income network (isolated network for passive income services)
 deploy_dashboards_LITE: true  # Set to true to deploy dashboards LITE (homepage, glances)
 
 ######################### Base infrastructure #########################
@@ -29,54 +28,30 @@ watchtower_notification_email_server_port: "587" # Port for Gmail email server
 
 ######################### Core infrastructure #########################
 ### Portainer
-portainer_data_path: /var/dockerdata/portainer/data # Path to Portainer data directory
+portainer_data_path: /var/docker_data/portainer/data # Path to Portainer data directory
 portainer_domain_prefix: portainer  # Domain prefix for Portainer
 
 
 ######################### Remote access #########################
 ### No-IP
-noip_config_path: /var/dockerdata/noip/config  # Path to No-IP configuration directory (e.g., /etc/noip)
+noip_config_path: /var/docker_data/noip/config  # Path to No-IP configuration directory (e.g., /etc/noip)
 noip_interval: 30m # Update interval in seconds for No-IP
 
 ### Wireguard
 wg_default_address_range: 10.10.0.x # Clients IP address range (e.g., 10.10.0.x)
 wg_default_dns: 1.1.1.1 # <-- Cloudflare DNS
-wg_data_path: /var/dockerdata/wireguard # Path to WireGuard data directory
-wg_domain_prefix: wireguard-dashboard  # Domain prefix for WireGuard dashboard
+wg_data_path: /var/docker_data/wireguard # Path to WireGuard data directory
 
 ### Putty
-putty_config_path: /var/dockerdata/putty/config # Path to store Putty configuration files
-putty_domain_prefix: putty # Domain prefix for Putty
+putty_config_path: /var/docker_data/putty/config # Path to store Putty configuration files
 
 
 ######################### Dashboards #########################
 ### Homepage
-homepage_config_path: /var/dockerdata/homepage/config # Path to store homepage configuration files
-homepage_domain_prefix: homepage # Domain prefix for Homepage
+homepage_config_path: /var/docker_data/homepage/config # Path to store homepage configuration files
 
 ### Glances
-glances_config_path: /var/dockerdata/glances/config # Path to store Glances configuration files
-glances_domain_prefix: glances # Domain prefix for Glances dashboard
+glances_config_path: /var/docker_data/glances/config # Path to store Glances configuration files
 
 ### Uptime Kuma
-uptime_kuma_data_path: /var/dockerdata/uptime-kuma # Path to Uptime Kuma data directory
-uptime_kuma_domain_prefix: uptime-kuma # Domain prefix for Uptime Kuma dashboard
-
-######################### Passive income #########################
-passive_income_network_name: passive_income_network_isolated
-passive_income_network_subnet: 172.99.3.0/24
-
-### Bitping
-bitping_data_path: /var/dockerdata/passive_income/bitping
-
-### Earnapp
-earnapp_data_path: /var/dockerdata/passive_income/earnapp
-
-### Mysterium Node
-mysterium_node_data_path: /var/dockerdata/passive_income/mysterium
-
-### Traffmonetizer
-traffmonetizer_images:
-  x86_64: "traffmonetizer/cli_v2:latest"
-  aarch64: "traffmonetizer/cli_v2:arm64v8"
-  armv7l: "traffmonetizer/cli_v2:arm32v7"
+uptime_kuma_data_path: /var/docker_data/uptime-kuma # Path to Uptime Kuma data directory

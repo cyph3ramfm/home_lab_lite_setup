@@ -8,6 +8,5 @@
   roles:
     - base_network_watchtower
     - core_infrastructure_lite
-    - passive_income
     - remote_access_lite
     - dashboards_lite

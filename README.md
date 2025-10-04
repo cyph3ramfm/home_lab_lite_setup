@@ -19,11 +19,6 @@ This project provides an automated way to deploy a lightweight home lab environm
 - **Homepage**: Customizable service dashboard (http://<ip>:3000)
 - **Glances**: System monitoring (http://<ip>:61208)
 
-### Passive Income Services (Isolated Network)
-- Multiple bandwidth/resource sharing services with built-in resource limits:
-  - Bitping, EarnApp, EarnFM, Honeygain, IPRoyalPawns
-  - MystNodes, PacketStream, ProxyRack, Repocket, Traffmonetizer
-
 ## Prerequisites
 
 1. Ubuntu/Debian-based system with:
@@ -70,14 +65,6 @@ This project provides an automated way to deploy a lightweight home lab environm
 
 ## Service Management
 
-### Network Isolation
-- Core services: `home_lab_network` (172.16.3.0/24)
-- Passive income: `passive_income_network_isolated` (172.99.3.0/24)
-
-### Resource Limits
-Each passive income service has predefined CPU/memory limits.
-See individual service templates for details
-
 ### Email Notifications
 Watchtower sends email notifications for container updates. Configure in `vault.yml`:
 - SMTP server settings
@@ -94,12 +81,6 @@ Watchtower sends email notifications for container updates. Configure in `vault.
    ```
 
 2. **Service Status**: Use Portainer (https://<ip>:9443) or Glances (http://<ip>:61208)
-
-3. **Network Issues**: Check isolation between networks:
-   ```bash
-   # Verify passive income network isolation
-   docker network inspect passive_income_network_isolated
-   ```
 
 ## Adding New Services
 

@@ -14,6 +14,11 @@
           - subnet: "{{ home_lab_network_subnet }}"
       become: true
       when: not home_lab_network_info.exists
+    
+    - name: Create base_network_watchtower directory
+      ansible.builtin.file:
+        path: /tmp/base_network_watchtower
+        state: directory
 
     - name: Include Watchtower tasks
       ansible.builtin.include_tasks: watchtower.yml

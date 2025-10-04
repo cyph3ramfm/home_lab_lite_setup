@@ -11,6 +11,11 @@
       ansible.builtin.fail:
         msg: "Required Docker network '{{ home_lab_network_name }}' does not exist. Please create the network first through the base_network_watchtower role."
       when: not network_info.exists
+    
+    - name: Create remote_access_lite directory
+      ansible.builtin.file:
+        path: /tmp/remote_access_lite
+        state: directory
 
     - name: Include noip tasks
       ansible.builtin.include_tasks: noip.yml

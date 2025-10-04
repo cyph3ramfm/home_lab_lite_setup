@@ -34,7 +34,7 @@
 
 - name: Deploy Homepage using Docker Compose
   community.docker.docker_compose_v2:
-    project_src: /tmp
+    project_src: /tmp/dashboards_lite
     files:
       - homepage.yml
   when: not homepage_info.exists

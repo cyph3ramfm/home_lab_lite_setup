@@ -11,6 +11,11 @@
       ansible.builtin.fail:
         msg: "Required Docker network '{{ home_lab_network_name }}' does not exist. Please create the network first through the base_network_watchtower role."
       when: not network_info.exists
+    
+    - name: Create dashboards_lite directory
+      ansible.builtin.file:
+        path: /tmp/dashboards_lite
+        state: directory
 
     - name: Include Glances tasks
       ansible.builtin.include_tasks: glances.yml
@@ -19,6 +24,12 @@
     - name: Include Homepage tasks
       ansible.builtin.include_tasks: homepage.yml
       when: homepage_config_path | length > 0
+    
+    - name: Restart Portainer container to prevent need for manual restart
+      community.docker.docker_container:
+        name: portainer
+        state: started
+        restart: true
 
     - name: Delete dashboards LITE related files
       ansible.builtin.file:
