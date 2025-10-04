@@ -29,7 +29,6 @@ watchtower_notification_email_server_port: "587" # Port for Gmail email server
 ######################### Core infrastructure #########################
 ### Portainer
 portainer_data_path: /var/docker_data/portainer/data # Path to Portainer data directory
-portainer_domain_prefix: portainer  # Domain prefix for Portainer
 
 
 ######################### Remote access #########################
@@ -54,4 +53,5 @@ homepage_config_path: /var/docker_data/homepage/config # Path to store homepage 
 glances_config_path: /var/docker_data/glances/config # Path to store Glances configuration files
 
 ### Uptime Kuma
+
 uptime_kuma_data_path: /var/docker_data/uptime-kuma # Path to Uptime Kuma data directory
