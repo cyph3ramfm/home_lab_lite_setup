@@ -1,9 +1,0 @@
----
-- name: Check if setup files exist
-  ansible.builtin.stat:
-    path: "/etc/passive_income_setup_complete"
-  register: setup_complete
-
-- name: Set fact about setup status
-  ansible.builtin.set_fact:
-    passive_income_setup_complete: "{{ setup_complete.stat.exists }}"
