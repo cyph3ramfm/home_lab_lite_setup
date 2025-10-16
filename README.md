@@ -47,7 +47,7 @@ This project provides an automated way to deploy a lightweight home lab environm
 
 2. **Deploy**:
    ```bash
-   ansible-playbook deploy_home_lab_lite_playbook.yml --ask-vault-pass --ask-become-pass
+   ansible-playbook deploy_home_lab_lite_playbook.yml -i inventory/hosts --ask-vault-pass --ask-become-pass
    ```
 
 ## Configuration Files
